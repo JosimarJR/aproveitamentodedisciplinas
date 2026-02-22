@@ -4,6 +4,17 @@ import stringSimilarity from 'string-similarity';
 export const normalize = (text: string) => {
   let clean = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
   
+  // 1. Remove Stop Words (palavras de ligação que geram ruído na comparação)
+  clean = clean.replace(/\b(de|da|do|dos|das|e|o|a|em|na|no|nas|nos|para|com|por)\b/g, " ");
+
+  // 2. Padronizar Numerais Romanos (I, II, III -> 1, 2, 3)
+  // Ajuda a casar "Cálculo I" com "Cálculo 1"
+  clean = clean
+    .replace(/\biv\b/g, "4")
+    .replace(/\biii\b/g, "3")
+    .replace(/\bii\b/g, "2")
+    .replace(/\bi\b/g, "1");
+
   // Expand common academic abbreviations to improve matching
   clean = clean
     .replace(/\bsup\.?\b/g, "supervisionado")
@@ -19,11 +30,15 @@ export const normalize = (text: string) => {
     .replace(/\bfor\.?\b/g, "formulacoes")
     .replace(/\bform\.?\b/g, "formulacoes")
     .replace(/\bgalenic[a-z]*\b/g, "galenica")
+    .replace(/\bbioquim\.?\b/g, "bioquimica")
+    .replace(/\bfisiol\.?\b/g, "fisiologia")
+    .replace(/\bpatol\.?\b/g, "patologia")
     // OCR Fixes
     .replace(/\|/g, "i") // Replace pipe | with i (common OCR error for I)
     .replace(/!/g, "i"); // Replace ! with i (common OCR error)
 
-  return clean;
+  // Remove espaços extras gerados
+  return clean.replace(/\s+/g, " ").trim();
 };
 
 export interface PredictionResult {
