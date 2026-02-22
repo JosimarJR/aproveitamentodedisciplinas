@@ -72,8 +72,8 @@ const Icons = {
 
 // --- CONFIGURATION ---
 const AVAILABLE_CURRICULA = [
-  { label: "Currículo 224 (Padrão)", filename: "./curricula/224.xlsx" },
-  { label: "Currículo 2024 (Novo)", filename: "./curricula/2024.xlsx" },
+  { label: "Currículo 224 (Padrão)", filename: process.env.PUBLIC_URL + "/curricula/224.xlsx" },
+  { label: "Currículo 2024 (Novo)", filename: process.env.PUBLIC_URL + "/curricula/2024.xlsx" },
 ];
 
 function App() {
